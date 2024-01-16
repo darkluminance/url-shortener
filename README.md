@@ -8,6 +8,7 @@ First, install the dependenies:
 npm run install
 # or
 npm i
+````
 
 Run the development server:
 
