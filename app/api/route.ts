@@ -12,7 +12,7 @@ export async function POST(request: Request) {
 			value: id.toString(16),
 			createdAt: new Date(),
 		});
-		const ret = post.value;
+		const ret = post?.value;
 		// await disconnect();
 
 		return Response.json({ url: ret });
