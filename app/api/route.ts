@@ -12,9 +12,10 @@ export async function POST(request: Request) {
 			value: id.toString(16),
 			createdAt: new Date(),
 		});
+		const ret = post.value;
 		// await disconnect();
 
-		return Response.json({ url: post.value });
+		return Response.json({ url: ret });
 	} catch (error) {
 		console.log('error from route', error);
 		return Response.json({ message: 'Error' });
