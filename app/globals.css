@@ -16,6 +16,10 @@
 	}
 }
 
+* {
+	box-sizing: border-box;
+}
+
 body {
 	color: rgb(88, 88, 88);
 	background-color: white;
