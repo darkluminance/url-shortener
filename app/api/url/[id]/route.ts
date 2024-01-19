@@ -8,7 +8,6 @@ export async function GET(
 	try {
 		await dbConnect();
 		const post = await PostModel.findOne({ value: params.id });
-		console.log(post.url);
 
 		return Response.json({ url: post.url });
 	} catch (error) {

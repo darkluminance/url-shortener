@@ -16,7 +16,6 @@ export default function Home() {
 			body: JSON.stringify(url),
 		});
 		const ret = await res.json();
-		console.log(location);
 
 		setShort(location.host + location.pathname + ret.url);
 		setloading(false);
