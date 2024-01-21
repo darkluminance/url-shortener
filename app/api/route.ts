@@ -9,7 +9,7 @@ export async function POST(request: Request) {
 		await dbConnect();
 		const post = await PostModel.create({
 			url: url,
-			value: id.toString(16),
+			value: id.toString(16).slice(-6),
 			createdAt: new Date(),
 		});
 		const ret = post?.value;

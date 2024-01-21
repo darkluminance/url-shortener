@@ -10,6 +10,14 @@ export default function Home() {
 	const [copyText, setCopyText] = useState('Copy');
 
 	const generateURL = async () => {
+		if (url === '' || url === null || url === undefined) {
+			alert('Please enter a URL');
+			return;
+		}
+		if (!isValidURL()) {
+			alert('URL is not valid');
+			return;
+		}
 		setloading(true);
 		const res = await fetch('/api', {
 			method: 'POST',
@@ -20,18 +28,40 @@ export default function Home() {
 		setShort(location.host + location.pathname + ret.url);
 		setloading(false);
 	};
+
+	const isValidURL = () => {
+		const urlRegex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/;
+		return urlRegex.test(url);
+	};
+
+	const connectToDB = async () => {
+		const res = await fetch('api/db/connect');
+	};
+	const disconnectFromDB = async () => {
+		const res = await fetch('api/db/disconnect');
+	};
+
+	useEffect(() => {
+		connectToDB();
+		// return () => {
+		// 	disconnectFromDB();
+		// };
+	}, []);
+
 	return (
 		<>
-			<main className="flex min-h-screen flex-col items-center justify-center align-center p-24">
+			<main className="flex min-h-screen flex-col items-center justify-center align-center p-2 lg:p-24">
 				{short !== '' && (
 					<div
-						className="absolute top-1/3 mb-8 px-8 py-4 w-full"
+						className="fixed top-1/4 lg:top-1/3 mb-8 px-8 py-4 w-full"
 						onClick={() => {
 							navigator.clipboard.writeText(short);
 						}}
 					>
-						<div className=" flex justify-center align-center ">
-							<span className="text-4xl text-wrap">{short}</span>
+						<div className=" flex flex-wrap md:flex-nowrap justify-center align-center ">
+							<span className="text-xl md:text-2xl lg:text-4xl truncate">
+								{short}
+							</span>
 							<button
 								onClick={() => {
 									navigator.clipboard.writeText(short);
@@ -50,7 +80,7 @@ export default function Home() {
 						</div>
 					</div>
 				)}
-				<div className="flex w-full gap-4 max-w-screen-lg justify-center items-center space-x-2 mb-8">
+				<div className="flex flex-wrap lg:flex-nowrap w-full gap-4 max-w-screen-lg justify-center items-center  mb-8">
 					<input
 						className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-lg ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
 						type="text"
@@ -65,13 +95,13 @@ export default function Home() {
 					{!loading && (
 						<button
 							onClick={generateURL}
-							className="w-60 px-8 py-2 rounded-md bg-gray-700 hover:bg-gray-500 active:bg-gray-400 text-slate-100"
+							className="w-full lg:w-60 px-8 py-2 rounded-md bg-gray-700 hover:bg-gray-500 active:bg-gray-400 text-slate-100"
 						>
 							Generate
 						</button>
 					)}
 					{loading && (
-						<button className="w-60 px-8 py-2 rounded-md bg-gray-700 text-slate-100 border">
+						<button className="w-full lg:w-60 px-8 py-2 rounded-md bg-gray-700 text-slate-100 border">
 							<svg
 								aria-hidden="true"
 								role="status"
