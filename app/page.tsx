@@ -18,6 +18,12 @@ export default function Home() {
 			alert('URL is not valid');
 			return;
 		}
+
+		// Check if last character is a '/' else include one
+		if (url.slice(-1) != '/') {
+			seturl(url + '/');
+		}
+
 		setloading(true);
 		const res = await fetch('/api', {
 			method: 'POST',
