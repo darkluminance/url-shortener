@@ -2,14 +2,17 @@ import { dbConnect, disconnect } from '@/utils/mongodb';
 import PostModel from '@/models/url-collection';
 
 export async function POST(request: Request) {
-	const url = await request.json();
+	const body = await request.json();
 	const id = Date.now();
 
 	try {
 		await dbConnect();
+
 		const post = await PostModel.create({
-			url: url,
+			url: body.url,
 			value: id.toString(16).slice(-6),
+			title: body.title,
+			thumbnail: body.thumbnail,
 			createdAt: new Date(),
 		});
 		const ret = post?.value;

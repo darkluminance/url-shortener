@@ -7,10 +7,13 @@ export async function GET(
 ) {
 	try {
 		await dbConnect();
-		const post = await PostModel.findOne({ value: params.id });
-		const ret = post?.url;
 
-		return Response.json({ url: ret });
+		const post = await PostModel.findOne({ value: params.id });
+		const url = post?.url;
+		const title = post?.title;
+		const thumbnail = post?.thumbnail;
+
+		return Response.json({ url: url, title: title, thumbnail: thumbnail });
 	} catch (error) {
 		console.log('error from route', error);
 		return Response.json({ message: 'Error' });

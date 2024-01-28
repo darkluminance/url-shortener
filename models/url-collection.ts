@@ -10,12 +10,22 @@ const urlListSchema = new Mongoose.Schema({
 		type: String,
 		required: true,
 	},
+	title: {
+		type: String,
+		required: false,
+	},
+	thumbnail: {
+		type: String,
+		required: false,
+	},
 	createdAt: { type: Date, default: Date.now, expires: '1h' },
 });
 //how our post looks like
 interface IPost {
 	url: string;
 	value: string;
+	title: string;
+	thumbnail: string;
 }
 
 interface IPostDocument extends IPost, Document {}

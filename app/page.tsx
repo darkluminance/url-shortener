@@ -25,14 +25,41 @@ export default function Home() {
 		}
 
 		setloading(true);
+		const urlMetadata = await getURLTitleAndThumbnail(url);
+
 		const res = await fetch('/api', {
 			method: 'POST',
-			body: JSON.stringify(url),
+			body: JSON.stringify({
+				url: url,
+				title: urlMetadata.title,
+				thumbnail: urlMetadata.thumbnail,
+			}),
 		});
 		const ret = await res.json();
 
 		setShort(location.host + location.pathname + ret.url);
 		setloading(false);
+	};
+
+	const getURLTitleAndThumbnail = async (link: string) => {
+		// Fetch HTML content of the URL
+		const response = await fetch(link);
+		const html = await response.text();
+
+		// Parse HTML using DOMParser
+		const parser = new DOMParser();
+		const doc = parser.parseFromString(html, 'text/html');
+
+		// Extract title
+		const title = doc.querySelector('title')?.innerText;
+
+		// Extract thumbnail (you may need to adjust the selector based on the structure of the HTML)
+		const thumbnailElement = doc.querySelector('meta[property="og:image"]');
+		const thumbnail = thumbnailElement
+			? thumbnailElement.getAttribute('content')
+			: null;
+
+		return { title, thumbnail };
 	};
 
 	const isValidURL = () => {

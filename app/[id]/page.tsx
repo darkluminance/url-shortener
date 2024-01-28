@@ -1,32 +1,29 @@
-'use client';
+import type { Metadata, ResolvingMetadata } from 'next';
+import Redirect from '../components/Redirect';
 
-import { redirect } from 'next/navigation';
-import { useEffect } from 'react';
+export async function generateMetadata(
+	{ params }: { params: { id: string } },
+	parent: ResolvingMetadata
+): Promise<Metadata> {
+	const id = params.id;
+	const baseURL = 'http://smol-url.vercel.app';
+
+	const res = await fetch(`${baseURL}/api/url/${id}`);
+	const product = await res.json();
+
+	console.log(product);
+	return {
+		title: product.title,
+		openGraph: {
+			images: [product.thumbnail],
+		},
+	};
+}
 
 export default function Page({ params }: { params: { id: string } }) {
-	const getURL = async () => {
-		const res = await fetch('/api/url/' + params.id.toString());
-		const ret = await res.json();
-		let obtainedURL = ret.url;
-
-		if (obtainedURL !== undefined && obtainedURL != null) {
-			// Check if last character is a '/' else include one
-			if (obtainedURL.slice(-1) != '/') {
-				obtainedURL += '/';
-			}
-			location.href = obtainedURL;
-		} else {
-			alert('Could not find the page');
-		}
-	};
-
-	useEffect(() => {
-		getURL();
-	}, []);
-
 	return (
 		<>
-			<h1>Redirecting to url...</h1>
+			<Redirect id={params.id}></Redirect>
 		</>
 	);
 }
