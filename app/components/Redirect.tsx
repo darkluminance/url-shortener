@@ -1,8 +1,10 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 function Redirect({ id }: { id: string }) {
+	const [isError, setIsError] = useState(false);
+
 	const getURL = async () => {
 		const res = await fetch('/api/url/' + id.toString());
 		const ret = await res.json();
@@ -16,7 +18,7 @@ function Redirect({ id }: { id: string }) {
 			}
 			location.href = obtainedURL;
 		} else {
-			alert('Could not find the page');
+			setIsError(true);
 		}
 	};
 
@@ -24,7 +26,13 @@ function Redirect({ id }: { id: string }) {
 		getURL();
 	}, []);
 
-	return <h1>Redirecting to url...</h1>;
+	if (!isError) return <h1>Redirecting to url...</h1>;
+	else
+		return (
+			<main className="h-screen flex  justify-center items-center">
+				<h1 className="text-2xl">Sorry, the page was not found</h1>
+			</main>
+		);
 }
 
 export default Redirect;
