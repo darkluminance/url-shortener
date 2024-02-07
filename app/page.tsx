@@ -27,14 +27,16 @@ export default function Home() {
 		setloading(true);
 		let urlMetadata = {
 			title: 'URL shortener',
-			thumbnail: null,
+			thumbnail: '',
 		};
 		try {
 			const urlmeta = await getURLTitleAndThumbnail(url);
-			urlMetadata = {
-				title: urlmeta.title,
-				thumbnail: urlmeta.thumbnail,
-			};
+			if (urlmeta.title && urlmeta.thumbnail) {
+				urlMetadata = {
+					title: urlmeta.title,
+					thumbnail: urlmeta.thumbnail,
+				};
+			}
 		} catch (error) {
 			console.log(error);
 		}
