@@ -25,7 +25,19 @@ export default function Home() {
 		}
 
 		setloading(true);
-		const urlMetadata = await getURLTitleAndThumbnail(url);
+		let urlMetadata = {
+			title: 'URL shortener',
+			thumbnail: null,
+		};
+		try {
+			const urlmeta = await getURLTitleAndThumbnail(url);
+			urlMetadata = {
+				title: urlmeta.title,
+				thumbnail: urlmeta.thumbnail,
+			};
+		} catch (error) {
+			console.log(error);
+		}
 
 		const res = await fetch('/api', {
 			method: 'POST',
@@ -43,8 +55,14 @@ export default function Home() {
 
 	const getURLTitleAndThumbnail = async (link: string) => {
 		// Fetch HTML content of the URL
-		const response = await fetch(link);
-		const html = await response.text();
+		const response = await fetch('/api/fetchurlmetadata', {
+			method: 'POST',
+			body: JSON.stringify({
+				url: link,
+			}),
+		});
+
+		const html = await response.json();
 
 		// Parse HTML using DOMParser
 		const parser = new DOMParser();
